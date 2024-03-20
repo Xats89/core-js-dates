@@ -17,8 +17,8 @@
  * '01 Jan 1970 00:00:00 UTC' => 0
  * '04 Dec 1995 00:12:00 UTC' => 818035920000
  */
-function dateToTimestamp(/* date */) {
-  throw new Error('Not implemented');
+function dateToTimestamp(date) {
+  return new Date(date).getTime();
 }
 
 /**
@@ -31,8 +31,12 @@ function dateToTimestamp(/* date */) {
  * Date(2023, 5, 1, 8, 20, 55) => '08:20:55'
  * Date(2015, 10, 20, 23, 15, 1) => '23:15:01'
  */
-function getTime(/* date */) {
-  throw new Error('Not implemented');
+function getTime(date) {
+  const newDate = new Date(date);
+  const hour = newDate.getHours().toString().padStart(2, '0');
+  const min = newDate.getMinutes().toString().padStart(2, '0');
+  const sec = newDate.getSeconds().toString().padStart(2, '0');
+  return `${hour}:${min}:${sec}`;
 }
 
 /**
@@ -46,8 +50,26 @@ function getTime(/* date */) {
  * '03 Dec 1995 00:12:00 UTC' => 'Sunday'
  * '2024-01-30T00:00:00.000Z' => 'Tuesday'
  */
-function getDayName(/* date */) {
-  throw new Error('Not implemented');
+function getDayName(date) {
+  const newDate = new Date(date);
+  switch (newDate.getDay()) {
+    case 0:
+      return 'Sunday';
+    case 1:
+      return 'Monday';
+    case 2:
+      return 'Tuesday';
+    case 3:
+      return 'Wednesday';
+    case 4:
+      return 'Thursday';
+    case 5:
+      return 'Friday';
+    case 6:
+      return 'Saturday';
+    default:
+      return 'Incorrect date';
+  }
 }
 
 /**
@@ -61,8 +83,13 @@ function getDayName(/* date */) {
  * Date('2024-02-13T00:00:00Z') => Date('2024-02-16T00:00:00Z')
  * Date('2024-02-16T00:00:00Z') => Date('2024-02-23T00:00:00Z')
  */
-function getNextFriday(/* date */) {
-  throw new Error('Not implemented');
+function getNextFriday(date) {
+  const initialDate = new Date(date);
+  const initialDay = initialDate.getDay();
+  let nexFriday = (5 + 7 - initialDay) % 7;
+  if (nexFriday === 0) nexFriday = 7;
+  initialDate.setDate(initialDate.getDate() + nexFriday);
+  return initialDate;
 }
 
 /**
@@ -76,8 +103,8 @@ function getNextFriday(/* date */) {
  * 1, 2024 => 31
  * 2, 2024 => 29
  */
-function getCountDaysInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountDaysInMonth(month, year) {
+  return new Date(year, month, 0).getDate();
 }
 
 /**
@@ -91,8 +118,12 @@ function getCountDaysInMonth(/* month, year */) {
  * '2024-02-01T00:00:00.000Z', '2024-02-02T00:00:00.000Z'  => 2
  * '2024-02-01T00:00:00.000Z', '2024-02-12T00:00:00.000Z'  => 12
  */
-function getCountDaysOnPeriod(/* dateStart, dateEnd */) {
-  throw new Error('Not implemented');
+function getCountDaysOnPeriod(dateStart, dateEnd) {
+  const start = new Date(dateStart);
+  const end = new Date(dateEnd);
+  const timeDiff = end - start;
+  const daysDiff = timeDiff / 86400000;
+  return daysDiff + 1;
 }
 
 /**
@@ -112,8 +143,11 @@ function getCountDaysOnPeriod(/* dateStart, dateEnd */) {
  * '2024-02-02', { start: '2024-02-02', end: '2024-03-02' } => true
  * '2024-02-10', { start: '2024-02-02', end: '2024-03-02' } => true
  */
-function isDateInPeriod(/* date, period */) {
-  throw new Error('Not implemented');
+function isDateInPeriod(date, period) {
+  const checkedDate = new Date(date);
+  const startDate = new Date(period.start);
+  const endDate = new Date(period.end);
+  return checkedDate >= startDate && checkedDate <= endDate;
 }
 
 /**
@@ -143,8 +177,15 @@ function formatDate(/* date */) {
  * 12, 2023 => 10
  * 1, 2024 => 8
  */
-function getCountWeekendsInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountWeekendsInMonth(month, year) {
+  let count = 0;
+  const date = new Date(year, month - 1, 1);
+  while (date.getMonth() === month - 1) {
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek === 0 || dayOfWeek === 6) count += 1;
+    date.setDate(date.getDate() + 1);
+  }
+  return count;
 }
 
 /**
@@ -190,8 +231,9 @@ function getNextFridayThe13th(/* date */) {
  * Date(2024, 5, 1) => 2
  * Date(2024, 10, 10) => 4
  */
-function getQuarter(/* date */) {
-  throw new Error('Not implemented');
+function getQuarter(date) {
+  const month = date.getMonth();
+  return Math.ceil((month + 1) / 3);
 }
 
 /**
